@@ -1,0 +1,456 @@
+
+服务器系统： 一般选 7 以上的版本 如centOs7.6, Ubuntu7.4
+所用工具：FinalShell（自行搜索），SSTap（下载地址https://wwud.lanzouw.com/iDyn50m0ifne）
+
+sudo yum install wget
+
+第一种方式：
+0.下载安装服务器远程链接工具FinalShell对购买的服务器远程登陆链接
+
+
+---------------------- ubuntu  --------------------------  适用 ubuntu\centos 7.6:
+
+2:
+wget --no-check-certificate https://gitee.com/wuhcun/sk5/raw/master/install.sh -O install.sh
+
+wget --no-check-certificate https://raw.githubusercontent.com/wuchun666/danted/master/install.sh -O install.sh
+
+3:
+bash install.sh --port=5431 --user=admin --passwd=123
+
+bash install.sh --ip=61.97.248.76:27.255.65.197 --port=5431 --user=admin --passwd=123
+
+// 检查防火墙端口是否开放
+ubuntu:
+sudo ufw status  --查看状态   若防火墙开启且 没有对应端口继续下一步
+--添加防火墙端口   sudo ufw allow 55441/tcp   或者  sudo ufw allow 40000:50000/tcp
+
+--连不上检查  ----- 排查时使用的
+
+sudo apt-get update
+sudo apt-get install apache2-utils
+sudo apt-get install libpam-pwdfile
+
+sudo apt-get update && sudo apt-get install apache2-utils && sudo apt-get install libpam-pwdfile
+
+auth required pam_pwdfile.so pwdfile /etc/danted/sockd.passwd
+account required pam_permit.so
+
+sudo service sockd restart
+
+sudo apt-get install -y gcc g++ automake make libpam0g-dev libldap2-dev libsasl2-dev libssl-dev
+
+//bash ubuntu.sh --ip=ip1,ip2 --port=5431 --user=admin --passwd=123
+
+配置文件位置：/etc/danted.conf
+
+----------------------  centOs7系统 ---------------------------------------------------
+#服务器登陆成功之后在服务中安装配置sk5 :
+1.安装 yum运行环境
+yum -y install gcc gcc-c++ automake make pam-devel openldap-devel cyrus-sasl-devel openssl-devel
+
+2.一键下载sk5安装包脚本
+//wget --no-check-certificate https://raw.github.com/Lozy/danted/master/install.sh -O install.sh
+wget --no-check-certificate https://gitee.com/wuhcun/sk5/raw/master/install.sh -O install.sh
+
+3.一键解析并执行sk5脚本 并设置端口号和账户名密码 完成ip代理
+bash install.sh --port=5431 --user=admin --passwd=123
+bash install.sh --ip="A.A.A.A:B.B.B.B" --port=2016 --user=sockd --passwd=sockd
+
+
+第二种配置安装sk5方式：
+一键安装x-ui ip代理面板工具，直接安装，根据提示输入多口号账号密码，安装完之后黑窗口上会显示x-ui的登陆地址（ip+端口号），然后登陆x-桌面系统面板，在入口规则那里添加服务器的地址进行绑定
+bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh)
+
+启动
+sudo /etc/init.d/sockd start
+停止
+sudo /etc/init.d/sockd stop  
+
+
+启动 sockd 服务：
+sudo systemctl start sockd
+设置 sockd 开机自启动：
+sudo systemctl enable sockd
+检查 sockd 服务状态：
+sudo systemctl status sockd
+重新加载 sockd 配置：
+sudo systemctl reload sockd
+
+
+
+/etc/danted/sockd.conf
+
+
+方法：原文地址：https://blog.csdn.net/dddgggd/article/details/122411969
+
+安装2：
+https://cloud.tencent.com/developer/article/2296617
+
+密码位置：
+pwdfile /etc/danted/sockd.passwd
+
+
+安卓可以使用的软甲：
+https://github.com/bndeff/socksdroid/releases/download/1.0.4/socksdroid-1.0.4.apk
+
+
+
+卸载方法：
+
+手动删除 Dante 配置文件：
+有时候，即使使用了 --purge 选项，某些配置文件也可能没有被删除。您可以手动删除这些文件：
+
+bash
+复制
+sudo rm -rf /etc/danted
+sudo rm -f /etc/init.d/sockd /etc/systemd/system/sockd.service
+检查并删除 Dante 用户和组：
+Dante 可能会创建特定的用户和组。您可以使用以下命令来删除它们：
+
+bash
+复制
+sudo deluser --remove-home danted
+sudo delgroup danted
+清理 systemd 服务：
+如果 Dante 服务仍然在 systemd 中注册，您可以使用以下命令来清理：
+
+bash
+复制
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+检查并删除 Dante 二进制文件：
+如果 Dante 的二进制文件仍然存在，您可以手动删除它们：
+
+bash
+复制
+sudo rm -f /usr/sbin/sockd
+检查并删除 Dante 日志文件：
+如果 Dante 的日志文件仍然存在，您可以手动删除它们：
+
+bash
+复制
+sudo rm -f /var/log/sockd.log
+重新检查系统：
+在执行了上述步骤后，再次检查系统以确保 Dante 已被完全移除：
+
+bash
+复制
+which sockd
+dpkg -l | grep dante
+如果您仍然遇到问题，可能需要进一步检查系统的其他
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1、首先，编译安装SS5需要先安装一些依赖组件
+
+#---------
+yum  -y install gcc gcc-c++ automake make pam-devel openldap-devel cyrus-sasl-devel openssl-devel
+#---------
+
+
+2、去官网 http://ss5.sourceforge.net/  下载SS5最新版本的源代码
+
+#---------
+wget https://jaist.dl.sourceforge.net/project/ss5/ss5/3.8.9-8/ss5-3.8.9-8.tar.gz
+#---------
+
+
+3、解压后开始编译安装：
+
+#---------
+tar zxvf ./ss5-3.8.9-8.tar.gz
+cd ss5-3.8.9
+./configure && make && make install
+#---------
+
+
+4、让SS5随系统一起启动
+
+#---------
+chmod +x /etc/init.d/ss5
+chkconfig --add ss5
+chkconfig --level 345 ss5 on
+#---------
+
+
+配置登录方式
+
+修改认证方式   /etc/opt/ss5/ss5.conf
+
+#---------
+vi /etc/opt/ss5/ss5.conf
+#---------
+
+
+删除原来所有配置 添加如下两行
+#---------
+auth    0.0.0.0/0               -              -
+permit -        0.0.0.0/0       -       0.0.0.0/0       -       -       -       -       -
+#---------
+
+
+默认的是：无用户认证。
+
+如果想要使用用户认证，需要将上面两行修改成下面这样：
+#---------
+auth 0.0.0.0/0 - u
+permit u 0.0.0.0/0 - 0.0.0.0/0 - - - - -
+#---------
+
+
+添加用户名及密码
+#---------
+vi /etc/opt/ss5/ss5.passwd
+#---------
+
+添加用户密码 每行一个用户+密码（之间用空格）
+#---------
+test1 12345
+test2 56789
+#---------
+
+配置端口
+修改ss5启动的参数，自定义代理端口  /etc/sysconfig/ss5 （如果不设置，默认是1080）
+
+此文件ss5启动时会主动加载，将
+#SS5_OPTS=" -u root"
+取消注释，修改成下面这样
+#---------
+SS5_OPTS=" -u root -b 0.0.0.0:10808"
+#---------
+
+启动ss5
+一定要在root用户目录下，执行
+#---------
+/etc/rc.d/init.d/ss5 restart
+#---------
+
+也可以用
+#---------
+service ss5 start
+#---------
+
+启动完成后，可以使用以下命令查看连接情况
+#---------
+netstat -an | grep 10808
+#---------
+
+查看日志
+#---------
+more /var/log/ss5/ss5.log
+#---------
+
+关闭ss5
+#---------
+/etc/rc.d/init.d/ss5 stop
+#---------
+也可以用
+#---------
+service ss5 stop
+#---------
+
+客户端代理软件
+Proxifier下载
+
+Proxifier注册码：
+
+L6Z8A-XY2J4-BTZ3P-ZZ7DF-A2Q9C（Portable Edition）
+5EZ8G-C3WL5-B56YG-SCXM9-6QZAP（Standard Edition）
+P427L-9Y552-5433E-8DSR3-58Z68（MAC）
+
+Please note that starting from High Sierra you need to manually allow Proxifier extension signed by “Initex LLC” at /Applications/System Preferences -> Security & Privacy
+打开 安全性与隐私->通用->允许插件载入
+
+如果服务器采用的是windows系统
+
+一种比较常用的搭配是 CCProxy （ss5代理服务器）+  Proxifier （客户端）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#sk5配置完成后：
+4.利用SSTap远程链接工具完成链接
+服务ip地址：所购买的服务器ip地址
+端口号：输入sk5刚设置的代理端口号
+账号密码：输入skt刚设置的账号密码
+
+
+***注意事项：
+1.有官网页面手动设置服务器的情况：有些购买的服务器开启了防火墙，如果有页面设置防火墙操作要在安全组（规则）中放开 sk5设置的端口号（TCP/UDP都要设置放开）或者把所有的端口都放开，或者直关闭防火强。有些防火墙设置玩之后需要重新启动防火墙（这指的是不是直接关闭防火墙开放端口的情况）
+2.没有官网页面设置服务器的情况：如果购买的服务器在官网没有设置防火墙端口的操作，需要自己远程登陆服务器在黑窗口里面自己设置这些操作
+3.udp测试不通过的情况：有些服务厂商，或者服务厂商所提供的控制面板代理工具会默认关闭udp端口，这个就需要自己到黑窗口自己去开启：例如阿里云提供的宝塔面板工具：如果你的vps安装了宝塔面板，宝塔会默认关闭UDP端口，需要我们手动命令设置udp开关情况
+4.一定要多关注端口（TCP/UDP）开放情况
+
+
+
+操作防火墙的命令
+centOs7系统 
+》7以上自带firewall防火墙
+》7以下是iptables防火墙。
+这里以7以上为例
+查看防火墙服务状态：systemctl status firewalld 或者 firewalld-cmd --state
+	出现Active: active (running)切高亮显示则表示是启动状态。
+	出现Active: inactive (dead)灰色表示停止，看单词也行
+	出现Unit firewalld.service could not be found. 表示没有装防火墙
+开启防火墙：systemctl start firewalld
+关闭防火墙：systemctl stop firewalld
+禁止防火墙开机启动：systemctl disable firewalld
+查看所有端口信息：firewall-cmd --list-ports
+查看所有开放端口信息：firewall-cmd --zone=public --list-ports
+查询某个端口是否开放：firewall-cmd --query-port=端口号/tcp
+查看某个开放端口信息：firewall-cmd --zone=public --query-port=端口号/tcp
+
+查看监听端口的情况：netstat -lnpt
+检查端口被占用情况：netstat -lnpt |grep 端口号
+开放某个TCP端口：firewall-cmd --zone=public --add-port=端口号/tcp --permanent
+开放某个UDP端口：firewall-cmd --add-port=端口号/udp --permanent
+关闭某个TCP端口：firewall-cmd --zone=public --remove-port=端口号/tcp --permanent
+关闭某个UDP端口：firewall-cmd --remove--port=端口号/udp --permanent
+开启TCP的10000-20000端口命令：
+firewall-cmd --add-port=10000-20000/tcp --permanent
+开启UDP的10000-20000端口命令：
+firewall-cmd --add-port=10000-20000/udp --permanent
+
+设置修改完端口配置之后要重启防火墙：firewall-cmd --reload   # 配置立即生效
+
+
+# 参数解释
+1、firwall-cmd：是Linux提供的操作firewall的一个工具；
+2、--permanent：表示设置为持久；
+3、--add-port：标识添加的端口；
+
+
+雅云服务器控制台（香港转韩国CN2云服务器）  登陆 密码 DemonXu@666
+
+
+curl http://100.100.100.200/latest/meta-data/network/interfaces/macs/00:16:3e:01:02:8d/primary-ip-address
+curl http://100.100.100.200/latest/meta-data/network/interfaces/macs/00:16:3e:01:02:8d/netmask
+curl http://100.100.100.200/latest/meta-data/network/interfaces/macs/00:16:3e:01:02:8d/gateway
+
+
+ip -4 route add default via 172.19.31.253 dev eth1 metric 1001 && \
+ip -4 route add default via 172.19.31.253 dev eth1 table 1001 && \
+ip -4 rule add from 172.19.19.105 lookup 1001
+
+ip -4 route add default via 172.19.31.253 dev eth1 metric 1001
+ip -4 route add default via 172.19.31.253 dev eth1 table 1001
+ip -4 rule add from 172.19.19.105 lookup 1001
+
+eth1
+主卡：00:16:3e:01:07:1f
+副卡：00:16:3e:01:02:8d
+主私网ip地址：172.19.19.105
+子网掩码：255.255.240.0
+网关：172.19.31.253
+
+et0
+公网ip:8.213.128.7
+主私网ip:172.19.19.104
+et1
+公网ip:8.213.130.58
+主私网ip: 172.19.19.105
+
+8.213.130.50
+
+查看网卡信息：
+ip address show 或者 ifconfig
+
+如果没有相应网卡信息 就下载并安装CLI工具获取网卡信息
+wget https://image-offline.oss-cn-hangzhou.aliyuncs.com/multi-nic-util/multi-nic-util-0.6.tgz && \
+tar -zxvf multi-nic-util-0.6.tgz && \
+cd multi-nic-util-0.6 && \
+bash install.sh
+重启弹性网卡服务
+systemctl restart eni.service
+重启网络服务 
+systemctl restart network
+查看路由信息
+route -n
+如果弹性网卡没有配置路由就执行一下信息 如果有配置就查看路由表和策略路由
+ip -4 route add default via 网关地址 dev eth1 metric 1001 && \
+ip -4 route add default via 网关地址  dev eth1 table 1001 && \
+ip -4 rule add from 弹性网卡的主私网IP lookup 1001
+
+查看路由表和策略路由
+ip route list table 1001 && \
+ip rule list
+配置开机时自动更新路由
+	编辑文件vim /etc/rc.local
+	在文件中放以下信息
+	ip -4 route add default via 网关地址 dev eth1 metric 1001
+	ip -4 route add default via 网关地址 dev eth1 table 1001
+	ip -4 rule add from 弹性网卡的主私网IP lookup 1001
+给文件添加执行权限
+chmod +x /etc/rc.local
+
+
+
+添加 iptables 规则，定义多个网卡ip出口为自定定义的出口ip而不是 都是主网卡ip的出口
+iptables -t mangle -A OUTPUT -m owner --uid-owner 1000 -j MARK --set-mark 1000
+iptables -t nat -A POSTROUTING -m mark --mark 1000 -j SNAT --to-source 8.213.128.7
+
+
+iptables -t mangle -A OUTPUT -m owner --uid-owner 1001 -j MARK --set-mark 1001
+iptables -t nat -A POSTROUTING -m mark --mark 1001 -j SNAT --to-source 8.213.130.58
+
+查看 POSTROUTING 规则表  iptables -t nat -nL --line 
+删除 POSTROUTING 规则  iptables -t nat -D POSTROUTING 1
+查看 OUTPUT 规则表  iptables -t mangle -nL --line
+删除 OUTPUT 规则  iptables -t mangle -D OUTPUT 1
+
+
+给 var/run/ss5 授权 chmod a+x /etc/rc.d/rc.local
+ss5 -u user1 -b 24.68.1.1:10001
+ss5 -u tom1 -b 8.213.128.7:54321
+ss5 -u tom2 -b 8.213.130.58:12345
