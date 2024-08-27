@@ -14,7 +14,7 @@ fi
 
 #REQUEST_SERVER="https://raw.github.com/Lozy/danted/master"
 #SCRIPT_SERVER="https://public.sockd.info"
-REQUEST_SERVER="https://raw.github.com/wuhcun666/gitsk5/master"
+REQUEST_SERVER="https://raw.github.com/wuhcun666/gitsk5/main"
 SCRIPT_SERVER="https://public.sockd.info"
 SYSTEM_RECOGNIZE=""
 
